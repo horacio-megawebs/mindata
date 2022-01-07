@@ -1,0 +1,18 @@
+package com.mindata.recruit.challengue;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ChallengueApplication {
+
+	static final Logger logger = LoggerFactory.getLogger(ChallengueApplication.class);
+
+	public static void main(String[] args) {
+		logger.info("Logback ok");
+		SpringApplication.run(ChallengueApplication.class, args);
+	}
+
+}
