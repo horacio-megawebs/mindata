@@ -1,0 +1,16 @@
+
+logging:
+  level:
+    org.springframework: ERROR
+    com.mindata: DEBUG
+
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: off
+
+server:
+  host: localhost
+  port: 8080
+
