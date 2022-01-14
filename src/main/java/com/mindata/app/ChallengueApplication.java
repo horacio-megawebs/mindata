@@ -1,5 +1,6 @@
 package com.mindata.app;
 
+import com.mindata.app.config.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -21,5 +22,10 @@ public class ChallengueApplication {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
+	}
+
+	@Bean
+	public ApplicationProperties applicationProperties() {
+		return new ApplicationProperties();
 	}
 }

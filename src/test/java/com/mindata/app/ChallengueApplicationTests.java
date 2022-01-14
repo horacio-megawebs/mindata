@@ -1,7 +1,11 @@
 package com.mindata.app;
 
+import com.mindata.app.config.ApplicationProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.UpperCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,13 +34,22 @@ class ChallengueApplicationTests {
 	@Autowired
 	private MockMvc mvc;
 
+	@Autowired
+	ApplicationProperties applicationProperties;
+
+	static final Logger logger = LoggerFactory.getLogger(ChallengueApplicationTests.class);
+
+
 	@Test
 	void contextLoads() {
 	}
 
+
 	@Test
 	public void getHello() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/api/hello").accept(MediaType.APPLICATION_JSON))
+		String baseUri = "http://" + applicationProperties.getServer().getHost() + ":" +
+				applicationProperties.getServer().getPort() ;
+		mvc.perform(MockMvcRequestBuilders.get(baseUri + "/api/hello").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("Hello World!")));
 	}
