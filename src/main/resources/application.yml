@@ -1,18 +1,35 @@
 
-application:
+spring:
+  profiles:
+    active:
+      - dev
 
-  logging:
-    level:
-      org.springframework: ERROR
-      com.mindata: DEBUG
+---
 
-  spring:
-    profiles:
-      active: dev
-    main:
-      banner-mode: off
+spring:
+  config:
+    activate:
+      on-profile: test
+server:
+  host: localhost
+  port: 8080
 
-  server:
-    host: localhost
-    port: 8080
+---
 
+spring:
+  config:
+    activate:
+      on-profile: prod
+server:
+  host: localhost
+  port: 8080
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+server:
+  host: localhost
+  port: 8080

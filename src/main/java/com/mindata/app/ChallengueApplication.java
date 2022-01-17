@@ -24,8 +24,4 @@ public class ChallengueApplication {
 		return builder.build();
 	}
 
-	@Bean
-	public ApplicationProperties applicationProperties() {
-		return new ApplicationProperties();
-	}
 }

@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = {"spring.profiles.active = test"})
 class ChallengueApplicationTests {
 
 	@Autowired
@@ -35,7 +37,7 @@ class ChallengueApplicationTests {
 	private MockMvc mvc;
 
 	@Autowired
-	ApplicationProperties applicationProperties;
+	private ApplicationProperties applicationProperties;
 
 	static final Logger logger = LoggerFactory.getLogger(ChallengueApplicationTests.class);
 
@@ -47,6 +49,7 @@ class ChallengueApplicationTests {
 
 	@Test
 	public void getHello() throws Exception {
+		logger.debug("server " + applicationProperties.getServer().getHost());
 		String baseUri = "http://" + applicationProperties.getServer().getHost() + ":" +
 				applicationProperties.getServer().getPort() ;
 		mvc.perform(MockMvcRequestBuilders.get(baseUri + "/api/hello").accept(MediaType.APPLICATION_JSON))

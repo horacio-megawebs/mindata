@@ -1,10 +1,17 @@
 package com.mindata.app.config;
 
+import liquibase.pro.packaged.L;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties(prefix = "application")
+import java.util.List;
+
+@Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties
 @Data
 public class ApplicationProperties {
 
