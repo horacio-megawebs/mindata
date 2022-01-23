@@ -23,5 +23,4 @@ public class ChallengueApplication {
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
 	}
-
 }

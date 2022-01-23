@@ -7,10 +7,13 @@ import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.UpperCa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,13 +28,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"spring.profiles.active = test"})
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ChallengueApplicationTests {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Autowired
 	private MockMvc mvc;
@@ -41,6 +44,14 @@ class ChallengueApplicationTests {
 
 	static final Logger logger = LoggerFactory.getLogger(ChallengueApplicationTests.class);
 
+	@Value("${spring.security.user.name}")
+	String userName;
+
+	@Value("${spring.security.user.password}")
+	String password;
+
+	@Autowired
+	TestRestTemplate testRestTemplate;
 
 	@Test
 	void contextLoads() {
@@ -52,18 +63,17 @@ class ChallengueApplicationTests {
 		logger.debug("server " + applicationProperties.getServer().getHost());
 		String baseUri = "http://" + applicationProperties.getServer().getHost() + ":" +
 				applicationProperties.getServer().getPort() ;
-		mvc.perform(MockMvcRequestBuilders.get(baseUri + "/api/hello").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(MockMvcRequestBuilders.get(baseUri + "/api/hello"). accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("Hello World!")));
 	}
 
 	@Test
-	void testHello() {
-
-
-		Assertions.assertEquals("Hello World!",
-				restTemplate.getForEntity(URI.create("/api/hello"), String.class));
+	void testHellowithTestRestTemplate() {
+		ResponseEntity<String> responseEntity = testRestTemplate.withBasicAuth( userName, password )
+				.getForEntity(URI.create("http://" + applicationProperties.getServer().getHost() + ":" +
+									applicationProperties.getServer().getPort() + "/api/hello"), String.class);
+		Assertions.assertEquals("Hello World!", responseEntity.getBody());
 	}
-
 
 }
