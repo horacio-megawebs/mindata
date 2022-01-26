@@ -1,6 +1,8 @@
 package com.mindata.app;
 
 import com.mindata.app.config.ApplicationProperties;
+import com.mindata.app.model.SuperHeroe;
+import com.mindata.app.rest.SuperHeroeDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.UpperCase;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
@@ -71,9 +74,29 @@ class ChallengueApplicationTests {
 	@Test
 	void testHellowithTestRestTemplate() {
 		ResponseEntity<String> responseEntity = testRestTemplate.withBasicAuth( userName, password )
-				.getForEntity(URI.create("http://" + applicationProperties.getServer().getHost() + ":" +
-									applicationProperties.getServer().getPort() + "/api/hello"), String.class);
+				.getForEntity( URI.create( (new StringBuilder())
+											.append( "http://" )
+											.append( applicationProperties.getServer().getHost() )
+											.append( ":" )
+											.append( applicationProperties.getServer().getPort() )
+											.append( "/api/hello" ).toString()) , String.class);
 		Assertions.assertEquals("Hello World!", responseEntity.getBody());
+	}
+
+	@Test
+	void testNewSuperHeroe() {
+		SuperHeroeDTO superHeroeDTO = SuperHeroeDTO.builder()
+													.id(1)
+													.nombre("Heman")
+													.build();
+		ResponseEntity<SuperHeroeDTO> responseEntity = testRestTemplate.withBasicAuth( userName, password)
+				.postForEntity( URI.create( (new StringBuilder())
+											.append( "http://" )
+											.append( applicationProperties.getServer().getHost() )
+											.append( ":" )
+											.append( applicationProperties.getServer().getPort() )
+											.append( "/api/new" ).toString()) , superHeroeDTO, SuperHeroeDTO.class);
+		Assertions.assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
 	}
 
 }
