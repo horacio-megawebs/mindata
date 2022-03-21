@@ -1,13 +1,15 @@
 package com.mindata.app.model;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
 import java.util.List;
-import org.springframework.data.repository.query.Param;
 
 @RepositoryRestResource(collectionResourceRel = "superheroe", path = "superheroe")
-public interface SuperHeroeRepository extends PagingAndSortingRepository<SuperHeroe, Long> {
+public interface SuperHeroeRepository extends JpaRepository<SuperHeroe, Long> {
 
-    List<SuperHeroe> findByName(@Param("name") String name);
+    List<SuperHeroe> findByNombreContaining(String nombre);
 
 }
